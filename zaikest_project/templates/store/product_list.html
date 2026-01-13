@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="bg-brand-dark min-h-screen py-8">
+    <div class="max-w-screen-xl mx-auto px-4">
+
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-serif text-brand-gold mb-4">Our Menu</h1>
+            <div class="w-24 h-1 bg-brand-gold mx-auto mb-4"></div>
+            <!-- Category Filter Pills -->
+            <div class="flex flex-wrap justify-center gap-4 mt-8">
+                <a href="{% url 'product_list' %}"
+                    class="px-6 py-2 rounded-full border border-brand-gold {% if not category %}bg-brand-gold text-brand-maroon{% else %}text-brand-gold hover:bg-brand-gold/10{% endif %} transition-colors font-semibold uppercase text-sm tracking-wider">
+                    All
+                </a>
+                {% for c in categories %}
+                <a href="{% url 'product_list_by_category' c.slug %}"
+                    class="px-6 py-2 rounded-full border border-brand-gold {% if category.slug == c.slug %}bg-brand-gold text-brand-maroon{% else %}text-brand-gold hover:bg-brand-gold/10{% endif %} transition-colors font-semibold uppercase text-sm tracking-wider">
+                    {{ c.name }}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <h2 class="text-3xl font-serif text-white mb-8 border-l-4 border-brand-gold pl-4">{% if category %}{{ category.name }}{% else %}All Items{% endif %}</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for product in products %}
+            <!-- Card -->
+            <div
+                class="flex flex-col bg-brand-maroon rounded-xl overflow-hidden border border-brand-gold/10 hover:border-brand-gold shadow-lg hover:shadow-2xl transition-all duration-300 group">
+                <!-- Image -->
+                <div class="h-48 overflow-hidden relative">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                        class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    {% else %}
+                    <div class="w-full h-full bg-black/20 flex items-center justify-center text-gray-500">No Image</div>
+                    {% endif %}
+                    <div class="absolute top-2 right-2">
+                        {% if product.is_best_seller %}
+                        <span
+                            class="bg-brand-gold text-brand-maroon text-xs font-bold px-2 py-1 rounded shadow-md">POPULAR</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-5 flex flex-col flex-grow">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-serif text-white group-hover:text-brand-gold transition-colors">{{ product.name }}</h3>
+                        <span class="text-brand-gold font-bold">Rs. {{ product.price|floatformat:0 }}</span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ product.short_description }}</p>
+
+                    <div class="mt-auto grid grid-cols-2 gap-2">
+                        <a href="{% url 'product_detail' product.slug %}"
+                            class="text-center py-2 border border-gray-600 rounded text-gray-300 hover:border-brand-gold hover:text-brand-gold transition-colors text-sm font-medium uppercase">Info</a>
+                        <a href="{% url 'product_detail' product.slug %}"
+                            class="w-full bg-brand-gold text-brand-maroon py-2 rounded font-bold hover:bg-white transition-colors text-sm text-center flex items-center justify-center uppercase">Add</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-3 text-center py-16 text-gray-500">
+                <p>No products found in this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% if cart|length > 0 %}
+<div class="h-20"></div> <!-- Spacer for floating button -->
+<div class="fixed bottom-4 left-4 right-4 z-50">
+    <div class="max-w-screen-xl mx-auto">
+        <div class="bg-brand-gold rounded-lg shadow-2xl p-4 flex items-center justify-between text-brand-maroon">
+            <div class="flex items-center space-x-4">
+                <div
+                    class="bg-brand-maroon text-brand-gold w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                    {{ cart|length }}
+                </div>
+                <div class="flex flex-col leading-tight">
+                    <span class="font-bold text-lg">Rs. {{ cart.get_total_price_after_discount|floatformat:0 }}</span>
+                    <span class="text-xs font-semibold opacity-80">Total</span>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'cart_detail' %}" class="flex items-center font-bold text-lg group">
+            View Cart
+            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3">
+                </path>
+            </svg>
+        </a>
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock %}

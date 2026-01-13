@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-12 min-h-screen">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <h1 class="text-3xl font-serif text-brand-gold mb-8">Shopping Cart</h1>
+
+        {% if cart|length > 0 %}
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Cart Items -->
+            <div class="lg:w-2/3">
+                <div class="bg-brand-maroon border border-brand-gold/20 rounded-lg overflow-hidden shadow-lg">
+                    <table class="w-full text-left">
+                        <thead class="bg-brand-dark text-brand-gold uppercase text-xs">
+                            <tr>
+                                <th class="px-6 py-4">Product</th>
+                                <th class="px-6 py-4 text-center">Quantity</th>
+                                <th class="px-6 py-4 text-right">Price</th>
+                                <th class="px-6 py-4 text-right">Total</th>
+                                <th class="px-6 py-4"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-brand-gold/10 text-gray-200">
+                            {% for item in cart %}
+                            {% with product=item.product %}
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                                            class="w-12 h-12 rounded object-cover mr-4 border border-brand-gold/30">
+                                        {% else %}
+                                        <div
+                                            class="w-12 h-12 bg-brand-dark rounded flex items-center justify-center text-xs mr-4 text-gray-500">
+                                            No Img</div>
+                                        {% endif %}
+                                        <a href="{% url 'product_detail' product.slug %}"
+                                            class="font-medium text-white hover:text-brand-gold">{{ product.name }}</a>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 text-center">
+                                    <form action="{% url 'cart_add' product.id %}" method="post"
+                                        class="inline-flex items-center justify-center">
+                                        {% csrf_token %}
+                                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                                            class="w-16 p-1 text-center border border-brand-gold/30 rounded mr-2 h-8 text-sm bg-brand-dark text-white focus:ring-brand-gold focus:border-brand-gold">
+                                        <button type="submit"
+                                            class="text-xs text-brand-gold hover:underline">Update</button>
+                                    </form>
+                                </td>
+                                <td class="px-6 py-4 text-right text-gray-400">Rs. {{ item.price|floatformat:0 }}</td>
+                                <td class="px-6 py-4 text-right font-bold text-brand-gold">Rs. {{ item.total_price|floatformat:0 }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <form action="{% url 'cart_remove' product.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit"
+                                            class="text-red-400 hover:text-red-300 font-medium text-sm">Remove</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endwith %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6">
+                    <a href="{% url 'product_list' %}" class="text-brand-gold font-medium hover:underline">&larr;
+                        Continue Shopping</a>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="lg:w-1/3">
+                <div class="bg-brand-maroon border border-brand-gold/20 rounded-lg p-6 shadow-lg sticky top-32">
+                    <h2 class="text-xl font-serif text-white mb-6 border-b border-brand-gold/20 pb-2">Order Summary</h2>
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between text-gray-300">
+                            <span>Subtotal</span>
+                            <span>Rs. {{ cart.get_total_price|floatformat:0 }}</span>
+                        </div>
+                        {% if cart.coupon_id %}
+                        <div class="flex justify-between text-green-400">
+                            <span>Discount</span>
+                            <span>- Rs. {{ cart.get_discount|floatformat:0 }}</span>
+                        </div>
+                        {% endif %}
+                        <div
+                            class="border-t border-brand-gold/20 pt-4 flex justify-between font-bold text-xl text-brand-gold">
+                            <span>Total</span>
+                            <span>Rs. {{ cart.get_total_price_after_discount|floatformat:0 }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Coupon Code -->
+                    <form action="{% url 'coupon_apply' %}" method="post" class="mb-8">
+                        {% csrf_token %}
+                        <label for="code" class="block text-sm font-medium text-gray-400 mb-2">Promo Code</label>
+                        <div class="flex">
+                            <input type="text" name="code" id="code" placeholder="Enter code"
+                                class="flex-grow rounded-l-md border-brand-gold/30 bg-brand-dark text-white focus:ring-brand-gold focus:border-brand-gold sm:text-sm p-2.5">
+                            <button type="submit"
+                                class="bg-brand-gold text-brand-maroon px-4 py-2 rounded-r-md hover:bg-white transition-colors text-sm font-bold">Apply</button>
+                        </div>
+                    </form>
+
+                    <a href="{% url 'checkout' %}"
+                        class="block w-full bg-brand-gold text-brand-maroon text-center py-4 rounded-lg font-bold hover:bg-white hover:text-brand-maroon transition-all shadow-md text-lg">Proceed
+                        to Checkout</a>
+                    <p class="text-xs text-center text-gray-500 mt-4">Cash on Delivery Available</p>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-24 bg-brand-maroon/50 rounded-lg border border-brand-gold/10">
+            <svg class="mx-auto h-20 w-20 text-brand-gold/50 mb-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            <h2 class="text-2xl font-serif text-white mb-2">Your cart is empty</h2>
+            <p class="text-gray-400 mb-8">Looks like you haven't added any pastes yet.</p>
+            <a href="{% url 'product_list' %}"
+                class="inline-block bg-brand-gold text-brand-maroon px-8 py-3 rounded-lg font-bold hover:bg-white transition-colors">Start
+                Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

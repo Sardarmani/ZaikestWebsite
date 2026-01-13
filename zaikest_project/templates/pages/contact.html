@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-16">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-serif font-bold text-center text-brand-gold mb-12">Contact Us</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div>
+                <h2 class="text-2xl font-serif font-bold text-white mb-6">Get in Touch</h2>
+                <p class="text-gray-400 mb-8">Have a question about our products or need help with an order? We're here
+                    to help.</p>
+
+                <div class="space-y-4">
+                    <div
+                        class="flex items-start bg-brand-maroon border border-brand-gold/10 p-6 rounded-xl hover:border-brand-gold/50 transition-colors">
+                        <svg class="w-6 h-6 text-brand-gold mt-1 mr-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z">
+                            </path>
+                        </svg>
+                        <div>
+                            <h3 class="font-bold text-white">Phone / WhatsApp</h3>
+                            <p class="text-gray-400">+92 331 0222233</p>
+                            <a href="#" class="text-brand-gold text-sm hover:underline">Chat on WhatsApp</a>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start bg-brand-maroon border border-brand-gold/10 p-6 rounded-xl hover:border-brand-gold/50 transition-colors">
+                        <svg class="w-6 h-6 text-brand-gold mt-1 mr-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        <div>
+                            <h3 class="font-bold text-white">Email</h3>
+                            <p class="text-gray-400">contact@zaikest.com</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="flex items-start bg-brand-maroon border border-brand-gold/10 p-6 rounded-xl hover:border-brand-gold/50 transition-colors">
+                        <svg class="w-6 h-6 text-brand-gold mt-1 mr-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                            </path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                        <div>
+                            <h3 class="font-bold text-white">Address</h3>
+                            <p class="text-gray-400">123 Food Street, Industrial Area, Karachi, Pakistan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Basic Contact Form -->
+            <div class="bg-brand-maroon border border-brand-gold/20 p-8 rounded-xl shadow-2xl">
+                <h2 class="text-2xl font-serif font-bold text-white mb-6">Send Message</h2>
+                <form>
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-brand-gold mb-1">Name</label>
+                        <input type="text" id="name"
+                            class="w-full rounded-md border-brand-gold/30 bg-brand-dark text-white shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-brand-gold mb-1">Email</label>
+                        <input type="email" id="email"
+                            class="w-full rounded-md border-brand-gold/30 bg-brand-dark text-white shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-sm font-medium text-brand-gold mb-1">Message</label>
+                        <textarea id="message" rows="4"
+                            class="w-full rounded-md border-brand-gold/30 bg-brand-dark text-white shadow-sm focus:border-brand-gold focus:ring-brand-gold"></textarea>
+                    </div>
+                    <button type="button"
+                        class="w-full bg-brand-gold text-brand-maroon font-bold py-3 px-4 rounded hover:bg-white transition duration-300">Send
+                        Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

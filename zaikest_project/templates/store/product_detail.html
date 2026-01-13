@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="py-8 md:py-16">
+    <div class="max-w-screen-xl mx-auto px-4">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8 text-sm text-gray-400" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2">
+                <li><a href="{% url 'home' %}" class="hover:text-brand-gold">Home</a></li>
+                <li>/</li>
+                <li><a href="{% url 'product_list' %}" class="hover:text-brand-gold">Menu</a></li>
+                <li>/</li>
+                <li class="text-brand-gold font-medium" aria-current="page">{{ product.name }}</li>
+            </ol>
+        </nav>
+
+        <!-- Main Product Card (Modal Style) -->
+        <div class="bg-white rounded-xl shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2">
+
+            <!-- Left: Image -->
+            <div class="relative bg-brand-dark h-64 md:h-auto overflow-hidden group">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                {% else %}
+                <div class="w-full h-full flex items-center justify-center text-gray-500">No Image</div>
+                {% endif %}
+                <!-- Texture overlay -->
+                <div class="absolute inset-0 bg-black/10"></div>
+            </div>
+
+            <!-- Right: Details -->
+            <div class="p-6 md:p-10 flex flex-col h-full text-gray-800">
+                <div class="flex justify-between items-start mb-4">
+                    <h1 class="text-3xl md:text-4xl font-serif text-brand-maroon font-bold">{{ product.name }}</h1>
+                    <div class="flex space-x-2">
+                        <button class="text-gray-400 hover:text-brand-maroon"><svg class="w-6 h-6" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z">
+                                </path>
+                            </svg></button>
+                    </div>
+                </div>
+
+                <div class="text-2xl font-bold text-gray-900 mb-6">
+                    Rs. {{ product.price|floatformat:0 }}
+                </div>
+
+                <p class="text-gray-600 mb-8 leading-relaxed">{{ product.short_description }}</p>
+
+                <!-- YouTube Video (Prominent placement) -->
+                {% if product.get_youtube_embed_url %}
+                <div class="mb-8 rounded-xl overflow-hidden shadow-2xl border-2 border-brand-gold/20 bg-black">
+                    <div class="relative pb-[56.25%] h-0">
+                        <iframe src="{{ product.get_youtube_embed_url }}" title="{{ product.name }} Video"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen class="absolute inset-0 w-full h-full"></iframe>
+                    </div>
+                    <div class="bg-brand-maroon py-2 px-4 text-center">
+                        <span class="text-brand-gold text-xs font-bold uppercase tracking-widest">Featured Video: How to
+                            use Zaikest Pastes</span>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Options -->
+                <div class="space-y-4 mb-8">
+                    <label
+                        class="flex items-center justify-between p-4 border border-brand-maroon/20 rounded-lg cursor-pointer bg-brand-maroon/5 hover:bg-brand-maroon/10 transition-colors">
+                        <div class="flex items-center">
+                            <input type="radio" name="size" checked
+                                class="w-4 h-4 text-brand-maroon focus:ring-brand-maroon border-gray-300">
+                            <span class="ml-3 font-medium text-brand-maroon">Regular Paste</span>
+                        </div>
+                        <span class="text-gray-900 font-bold">Rs. {{ product.price|floatformat:0 }}</span>
+                    </label>
+                </div>
+
+                <!-- Special Instructions -->
+                <div class="mb-8">
+                    <label class="block text-sm font-bold text-brand-maroon mb-2">Special Instructions</label>
+                    <textarea
+                        class="w-full border-gray-300 rounded-lg focus:ring-brand-maroon focus:border-brand-maroon p-3 text-sm bg-gray-50"
+                        rows="2" placeholder="Any specific requests?"></textarea>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="mt-auto pt-6 border-t border-gray-100 flex items-center space-x-4">
+                    <!-- Quantity Stepper -->
+                    <form action="{% url 'cart_add' product.id %}" method="post" class="flex-grow flex space-x-4">
+                        {% csrf_token %}
+                        <div class="flex items-center border border-gray-300 rounded-lg bg-gray-50">
+                            <button type="button" onclick="decrement()"
+                                class="px-4 py-2 text-gray-600 hover:text-brand-maroon font-bold text-xl">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1"
+                                class="w-12 text-center border-none bg-transparent focus:ring-0 p-0 text-gray-900 font-bold">
+                            <button type="button" onclick="increment()"
+                                class="px-4 py-2 text-gray-600 hover:text-brand-maroon font-bold text-xl">+</button>
+                        </div>
+
+                        <button type="submit"
+                            class="flex-grow bg-brand-gold text-brand-maroon hover:bg-brand-maroon hover:text-brand-gold transition-colors font-bold text-lg rounded-lg px-8 py-3 shadow-lg flex items-center justify-center">
+                            <span>Add to Cart</span>
+                            <span class="ml-2 px-2 py-0.5 bg-black/10 rounded-full text-sm">Rs. {{ product.price|floatformat:0 }}</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info Tabs (Below) -->
+        <div class="mt-12 text-gray-300">
+            <h3 class="text-xl font-serif text-brand-gold mb-4 border-b border-brand-gold/20 pb-2">Recipe & Usage</h3>
+            <div class="prose prose-invert max-w-none">
+                <p class="mb-4">{{ product.recipe_usage|default:"Perfect for authentic home cooking." }}</p>
+                <p>{{ product.how_to_cook }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function increment() {
+        const input = document.getElementById('quantity');
+        input.value = parseInt(input.value) + 1;
+    }
+    function decrement() {
+        const input = document.getElementById('quantity');
+        if (parseInt(input.value) > 1) {
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+</script>
+{% endblock %}
