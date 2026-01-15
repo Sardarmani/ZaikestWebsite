@@ -20,10 +20,15 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'customer_name', 'phone_number', 'city', 'total_amount', 'status', 'created_at']
+    list_display = ['id', 'customer_name', 'phone_number', 'city', 'total_amount', 'status', 'items_summary', 'created_at']
     list_filter = ['status', 'created_at', 'city']
     inlines = [OrderItemInline]
     search_fields = ['customer_name', 'phone_number', 'id']
+
+    def items_summary(self, obj):
+        items = obj.items.all()
+        return ", ".join([f"{item.quantity}x {item.product.name}" for item in items])
+    items_summary.short_description = 'Items'
 
 @admin.register(Coupon)
 class CouponAdmin(admin.ModelAdmin):

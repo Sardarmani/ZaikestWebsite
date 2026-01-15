@@ -11,7 +11,8 @@
             </svg>
         </div>
         <h1 class="text-4xl font-serif font-bold text-brand-gold mb-4">Order Confirmed!</h1>
-        <p class="text-gray-300 mb-10 text-lg">Thank you, <span class="font-bold text-white">{{ order.customer_name }}</span>. Your order <span class="text-brand-gold">#{{ order.id }}</span> has been received.</p>
+        <p class="text-gray-300 mb-10 text-lg">Thank you, <span class="font-bold text-white">{{ order.customer_name
+                }}</span>. Your order <span class="text-brand-gold">#{{ order.id }}</span> has been received.</p>
 
         <div
             class="bg-brand-maroon border border-brand-gold/20 p-8 rounded-xl text-left mb-10 shadow-2xl relative overflow-hidden">
@@ -36,8 +37,8 @@
         </div>
 
         <div class="space-y-4">
-            <a href="https://wa.me/?text=Hi%20Zaikest,%20I%20just%20placed%20order%20%23{{ order.id }}%20for%20Rs.%20{{ order.total_amount|stringformat:".0f" }}.%20Can%20you%20confirm?"
-                target="_blank"
+            <a href="https://wa.me/923019361800?text=Hi%20Zaikest,%20I%20just%20placed%20order%20%23{{ order.id }}%20for%20Rs.%20{{ order.total_amount|stringformat:"
+                .0f" }}.%20Can%20you%20confirm?" target="_blank"
                 class="flex items-center justify-center w-full text-white bg-[#25D366] hover:bg-[#20bd5a] font-bold rounded-lg px-5 py-4 transition-colors shadow-lg">
                 <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
                     <path
